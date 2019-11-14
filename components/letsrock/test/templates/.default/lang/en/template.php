@@ -1,0 +1,4 @@
+<?
+$MESS["C_JOB_TITLE"] = "How it works";
+$MESS["C_JOB_PRESENTATION"] = "DOWNLOAD PRESENTATION";
+?>
