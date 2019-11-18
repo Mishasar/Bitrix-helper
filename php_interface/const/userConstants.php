@@ -45,5 +45,6 @@ const IB_SLIDER = 6;
 const IB_PROPS = 7;
 const IB_ADVANTAGES = 8;
 const IB_VIDEO = 9;
+const IB_BONUS_SYSTEM = 10;
 
 
