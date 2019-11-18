@@ -115,7 +115,6 @@ class OrderController extends Controller
         ];
     }
 
-
     /**
      * AJAX
      * Повторяет заказ по ID
@@ -252,5 +251,25 @@ class OrderController extends Controller
         }
 
         return $statuses;
+    }
+
+    /**
+     * Обработчик события смены статуса
+     *
+     * @param \Bitrix\Main\Event $event
+     *
+     * @return \Bitrix\Main\EventResult
+     */
+    public static function orderBonusHandler(\Bitrix\Main\Event $event) {
+        $parameters = $event->getParameters();
+        if ($parameters['VALUE'] === 'F') {
+            /** @var \Bitrix\Sale\Order $order */
+            $order = $parameters['ENTITY'];
+
+        }
+
+        return new \Bitrix\Main\EventResult(
+            \Bitrix\Main\EventResult::SUCCESS
+        );
     }
 }
