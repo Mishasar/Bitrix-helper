@@ -236,7 +236,47 @@ class Helper
     {
         return CFile::ResizeImageGet($number, $size, BX_RESIZE_IMAGE_PROPORTIONAL);
     }
+
+    /**
+     * Возвращает левую границу интервала
+     * при поиске в массиве по ключу
+     *
+     * @param array $array
+     * @param int $currentKey
+     *
+     * @return bool|int|string
+     */
+
+    public static function findLeftBorderInArray(array $array, int $currentKey)
+    {
+        if (empty($array)) {
+            return false;
+        }
+
+        ksort($array);
+        $prevKey = 0;
+        $foundKey = 0;
+        $iterator = 1;
+        $itemsCount = count($array);
+
+        foreach ($array as $key => $item) {
+            if ($currentKey >= $key && $iterator < $itemsCount) {
+                $foundKey = $prevKey;
+                $prevKey = $key;
+            } elseif ($currentKey < $key && $iterator == $itemsCount) {
+                $foundKey = $prevKey;
+                break;
+            } elseif ($iterator == $itemsCount) {
+                $foundKey = $key;
+                break;
+            } else {
+                $foundKey = $prevKey;
+                break;
+            }
+
+            $iterator++;
+        }
+
+        return $foundKey;
+    }
 }
-
-
-

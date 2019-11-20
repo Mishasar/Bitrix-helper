@@ -3,6 +3,7 @@
 namespace Letsrock\Lib\Models;
 
 use Bitrix\Main\Loader;
+use Bitrix\Main\UserTable;
 
 Loader::includeModule('iblock');
 
@@ -172,6 +173,29 @@ class User
 
     }
 
+    /**
+     * Изменяет количество бонусов у пользователя
+     *
+     * @param $id
+     * @param $bonusCount
+     * @param bool $add
+     *
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\SystemException
+     */
+    public static function changeBonus($userId, $bonusCount, $add = true) {
+        $user = UserTable::getEntity($userId);
+        $currentBonusCount = $user->getField('UF_BONUS');
+
+        if ($add) {
+            $currentBonusCount += $bonusCount;
+        } else {
+            $currentBonusCount -= $bonusCount;
+
+        }
+
+        $user->setField('UF_BONUS', $currentBonusCount);
+    }
 }
 
 

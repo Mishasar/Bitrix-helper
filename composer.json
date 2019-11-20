@@ -1,7 +1,9 @@
 {
     "require": {
         "wikimedia/composer-merge-plugin": "dev-master",
-        "nikic/fast-route": "^1.3"
+        "nikic/fast-route": "^1.3",
+        "phpdocumentor/flyfinder": "1.x-dev",
+        "phpdocumentor/graphviz": "2.0.0-beta1"
     },
     "extra": {
         "merge-plugin": {

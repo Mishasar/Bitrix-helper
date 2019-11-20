@@ -35,7 +35,7 @@ const PROPERTIES_SECTION = [
  * Highload блоки
  */
 
-//const HL_CITY = 3;
+const HL_BONUS = 1;
 
 /**
  * Инфоблоков

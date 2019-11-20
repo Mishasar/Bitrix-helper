@@ -9,6 +9,7 @@ use Bitrix\Sale\Basket;
 use Bitrix\Sale\Order;
 use CFile;
 use CIBlockElement;
+use Letsrock\Lib\Models\BonusTransaction;
 use Letsrock\Lib\Models\CatalogHelper;
 
 Loader::includeModule('sale');
@@ -183,7 +184,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Возвращает список заказов по  текущего ползователя
+     * Возвращает список заказов текущему ползователю
      *
      * @return array
      * @throws \Bitrix\Main\ArgumentException
@@ -266,6 +267,15 @@ class OrderController extends Controller
             /** @var \Bitrix\Sale\Order $order */
             $order = $parameters['ENTITY'];
 
+            $price = $order->getPrice();
+            $bonusModel = new BonusSystemController();
+            $bonusCount = $bonusModel->getBonusCountByMoney($price, 1);
+
+            BonusTransaction::depositBonus([
+                'BONUS'=> $bonusCount,
+                'USER'=> $order->getUserId(),
+                'ORDER'=> $order->getId(),
+            ]);
         }
 
         return new \Bitrix\Main\EventResult(

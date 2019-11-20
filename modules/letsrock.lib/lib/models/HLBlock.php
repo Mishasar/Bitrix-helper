@@ -52,4 +52,8 @@ class HLBlock {
 
         return $list;
     }
+
+    function add($params) {
+        return $this->entityClass::add($params);
+    }
 }
