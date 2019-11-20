@@ -22,7 +22,7 @@ if (!is_array($css) || !in_array("/bitrix/css/main/font-awesome.css", $css)) {
     $strReturn .= '<link href="' . CUtil::GetAdditionalFileURL("/bitrix/css/main/font-awesome.css") . '" type="text/css" rel="stylesheet" />' . "\n";
 }
 
-$strReturn .= '<section class="breadcrumbs-section" itemprop="http://schema.org/breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList"><div class="container"><ul class="breadcrumbs">';
+$strReturn .= '<section class="breadcrumbs-section" itemprop="http://schema.org/breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList"><div class="container"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/">Главная</a></li>';
 
 $itemSize = count($arResult);
 for ($index = 0; $index < $itemSize; $index++) {
