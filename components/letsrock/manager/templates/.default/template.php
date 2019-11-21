@@ -4,8 +4,10 @@
 ?>
 <div class="personal-card">
     <div class="personal-card__head">
-        <div class="personal-card__avatar"><img src="<?= $arParams['IMAGE_SRC'] ?>" alt="<?= $arParams['NAME'] ?>">
-        </div>
+        <? if (!empty($arResult['IMAGE_SRC'])): ?>
+            <div class="personal-card__avatar"><img src="<?= $arResult['IMAGE_SRC'] ?>" alt="<?= $arParams['NAME'] ?>">
+            </div>
+        <? endif; ?>
         <div class="personal-card__info">
             <div class="personal-card__name"><?= $arParams['NAME'] ?></div>
             <div class="personal-card__position"><?= $arParams['POSITION'] ?></div>

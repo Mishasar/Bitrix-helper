@@ -2,8 +2,6 @@
     die();
 }
 
-use \Letsrock\Lib\Models\Job;
-
 \Bitrix\Main\Loader::includeModule('letsrock.lib');
 
 /**
@@ -16,7 +14,7 @@ class ManagerComponent extends CBitrixComponent
         $result = [
             "NAME" => $arParams["NAME"],
             "EMAIL" => $arParams["EMAIL"],
-            "IMAGE_SRC" => $arParams["IMAGE_SRC"],
+            "IMAGE_ID" => $arParams["IMAGE_ID"],
             "POSITION" => $arParams["POSITION"],
             "PHONE" => $arParams["PHONE"],
             "CACHE_TYPE" => $arParams["CACHE_TYPE"],
@@ -32,6 +30,16 @@ class ManagerComponent extends CBitrixComponent
     public function executeComponent()
     {
         if ($this->startResultCache()) {
+            $imageArray = CFile::ResizeImageGet(
+                $this->arParams["IMAGE_ID"],
+                ["width" => 80, "height" => 80],
+                BX_RESIZE_IMAGE_PROPORTIONAL
+            );
+
+            if ($imageArray) {
+                $this->arResult['IMAGE_SRC'] = $imageArray['src'];
+            }
+
             $this->includeComponentTemplate();
         }
 

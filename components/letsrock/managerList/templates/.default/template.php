@@ -5,7 +5,7 @@
 <div class="personal-card__list">
     <? foreach ($arResult as $item): ?>
         <? $APPLICATION->IncludeComponent("letsrock:manager", ".default", [
-        'NAME' => $item['NAME'] . ' ' . $item['SECOND_NAME'] . '' . $item['LAST_NAME'],
+        'NAME' => $item['NAME'] . ' ' . $item['SECOND_NAME'] . ' ' . $item['LAST_NAME'],
         'POSITION' => $item['PROFESSION'],
         'IMAGE_ID' => $item['PHOTO'],
         'PHONE' => $item['PHONE'],
