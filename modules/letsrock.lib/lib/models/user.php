@@ -219,9 +219,6 @@ class User
 
             if ($managerId) {
                 $arResult = \CUser::GetByID($managerId)->GetNext();
-                $arResult['PHOTO'] = CFile::ResizeImageGet($arResult["PERSONAL_PHOTO"],
-                    ["width" => 100, "height" => 100], BX_RESIZE_IMAGE_PROPORTIONAL);
-
                 return $arResult;
             }
 
