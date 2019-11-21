@@ -5,7 +5,7 @@ namespace Letsrock\Lib\Models;
 use Bitrix\Main\Loader;
 use CFile;
 
-/*
+/**
  * Class SectionGallery
  */
 

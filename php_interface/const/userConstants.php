@@ -6,8 +6,9 @@
 const ASSETS_PATH = '/local/assets/';
 const SALE_PRICE_ID = 17;
 const STORE_BARNAUL_ID = 5;
-const STORE_MOSCOW_ID = 17;
+const STORE_MOSCOW_ID = 7;
 const PROPERTY_ARTICLES = 'PROPERTY_ARTICLES';
+const GROUP_MANAGER_ID = 14;
 
 const PROPERTIES_SECTION = [
   [

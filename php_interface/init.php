@@ -11,3 +11,9 @@ require $_SERVER["DOCUMENT_ROOT"] . '/local/vendor/autoload.php';
     'sale',
     'OnSaleStatusOrderChange',
     ['Letsrock\\Lib\\Controllers\\OrderController', 'orderBonusHandler']);
+
+//  Проверяем пришел ли email или login и если email авторизуем по нему
+\Bitrix\Main\EventManager::getInstance()->addEventHandler(
+    'main',
+    'OnBeforeUserLogin',
+    ['Letsrock\\Lib\\Controllers\\OrderController', 'DoBeforeUserLoginHandler']);

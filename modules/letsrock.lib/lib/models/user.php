@@ -8,7 +8,7 @@ use Bitrix\Main\UserTable;
 Loader::includeModule('iblock');
 
 
-/*
+/**
  * Class User
  * Класс для работы с пользователями
  */
@@ -195,6 +195,39 @@ class User
         }
 
         $user->setField('UF_BONUS', $currentBonusCount);
+    }
+
+    /**
+     * Возвращает информацию о прикреплённом менеджере текущего пользователя
+     *
+     * @param bool $userId
+     *
+     * @return array|bool
+     */
+
+    public static function getManager($userId = false)
+    {
+        global $USER;
+
+        if ($USER->IsAuthorized()) {
+            if (!$userId) {
+                $userId = $USER->GetID();
+            }
+
+            $userInfo = \CUser::GetByID($userId)->GetNext();
+            $managerId = $userInfo['UF_MANAGER'];
+
+            if ($managerId) {
+                $arResult = \CUser::GetByID($managerId)->GetNext();
+                $arResult['PHOTO'] = CFile::ResizeImageGet($arResult["PERSONAL_PHOTO"],
+                    ["width" => 100, "height" => 100], BX_RESIZE_IMAGE_PROPORTIONAL);
+
+                return $arResult;
+            }
+
+            return false;
+        }
+        return false;
     }
 }
 
