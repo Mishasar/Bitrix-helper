@@ -104,8 +104,8 @@ class OrderController extends Controller
                 $product = $arProducts[$productId];
                 $arProduct['PRODUCT_INFORMATION'] = $product;
                 $arProduct['STOCK'] = current(CatalogHelper::getStoreAmount($productId, $stockId));
-                $weight += $product['PROPERTY_VES_ZA_EDENITSU_VALUE'];
-                $volume += $product['PROPERTY_OBEM_ZA_EDENITSU_VALUE'];
+                $weight += $product['PROPERTY_' . PROPERTY_WEIGHT];
+                $volume += $product['PROPERTY_' . PROPERTY_CAPACITY];
                 $cost += $arProduct['BASKET_PRODUCT']['BASE_PRICE'] * $arProduct['BASKET_PRODUCT']['QUANTITY'];
             }
         }

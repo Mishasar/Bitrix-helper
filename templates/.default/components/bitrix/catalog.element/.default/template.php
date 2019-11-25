@@ -2,6 +2,8 @@
     die();
 }
 
+use \Letsrock\Lib\Models\{CatalogHelper, Helper};
+
 /**
  * @global CMain $APPLICATION
  * @var array $arParams
@@ -18,20 +20,20 @@ $this->setFrameMode(true);
 
 $prices = [];
 
-$prices = \Letsrock\Lib\Models\CatalogHelper::getElementPrice($arResult['ID']);
-$saleSize = \Letsrock\Lib\Models\CatalogHelper::getSale($prices['NORMAL_PRICE']['PRICE'],
+$prices = CatalogHelper::getElementPrice($arResult['ID']);
+$saleSize = CatalogHelper::getSale($prices['NORMAL_PRICE']['PRICE'],
     $prices['SALE_PRICE']['PRICE']);
 
 $arResult['PROPERTIES']['MORE_PHOTO']['VALUE'][] = $arResult['DETAIL_PICTURE']['ID'];
 
-$imagesBig = \Letsrock\Lib\Models\Helper::getArrayImages($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'],
+$imagesBig = Helper::getArrayImages($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'],
     ["width" => 1000, "height" => 1000]);
-$imagesSmall = \Letsrock\Lib\Models\Helper::getArrayImages($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'],
+$imagesSmall = Helper::getArrayImages($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'],
     ["width" => 300, "height" => 300]);
 
-$sortProps = \Letsrock\Lib\Models\CatalogHelper::sortProperties($arResult['DISPLAY_PROPERTIES']);
+$sortProps = CatalogHelper::sortProperties($arResult['DISPLAY_PROPERTIES']);
 
-$presentation = \Letsrock\Lib\Models\CatalogHelper::getPresentation($arResult['IBLOCK_SECTION_ID']);
+$presentation = CatalogHelper::getPresentation($arResult['IBLOCK_SECTION_ID']);
 
 ?>
     <section class="section catalog-detail__section" itemscope itemtype="http://schema.org/Product">
@@ -77,14 +79,10 @@ $presentation = \Letsrock\Lib\Models\CatalogHelper::getPresentation($arResult['I
                     <div class="catalog-detail__head">
                         <h1 class="catalog-detail__title"><?= $arResult['NAME'] ?></h1>
                         <div class="catalog-detail__head-info">
-                            <? if (!empty($arResult['DISPLAY_PROPERTIES']['CML2_ARTICLE'])): ?>
                                 <div class="catalog-detail__article">
                                     <div class="catalog-detail__article-key">Артикул:</div>
-                                    <div class="catalog-detail__article-value"><?= $arResult['DISPLAY_PROPERTIES']['CML2_ARTICLE']['VALUE'] ?></div>
+                                    <div class="catalog-detail__article-value"><?= CatalogHelper::getArticles($arResult['ID']) ?></div>
                                 </div>
-                                <?
-                                unset($arResult['DISPLAY_PROPERTIES']['CML2_ARTICLE']); //Артикул вывели, больше он не нужен
-                            endif; ?>
                             <div class="catalog-detail__new">Новинка</div>
                             <? if (!empty($presentation)): ?>
                                 <a class="catalog-detail__download" href="<?= $presentation ?>">
@@ -105,7 +103,7 @@ $presentation = \Letsrock\Lib\Models\CatalogHelper::getPresentation($arResult['I
                                         <div class="catalog-detail__options-box">
                                             <? foreach ($propSection['FIELDS'] as $property): ?>
                                                 <div class="catalog-detail__options-row">
-                                                    <div class="catalog-detail__options-key"><?= $property['NAME'] ?></div>
+                                                    <div class="catalog-detail__options-key"><?= CatalogHelper::getClearName($property['NAME']) ?></div>
                                                     <div class="catalog-detail__options-line"></div>
                                                     <div class="catalog-detail__options-value"><?= (is_array($property['DISPLAY_VALUE'])
                                                             ? implode(' / ', $property['DISPLAY_VALUE'])

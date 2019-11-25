@@ -7,29 +7,42 @@ const ASSETS_PATH = '/local/assets/';
 const SALE_PRICE_ID = 17;
 const STORE_BARNAUL_ID = 5;
 const STORE_MOSCOW_ID = 7;
-const PROPERTY_ARTICLES = 'PROPERTY_ARTICLES';
+const PROPERTY_ARTICLES = 'CML2_TRAITS';
 const GROUP_MANAGER_ID = 14;
+const PROPERTY_NEW = 'MOSHCHNOST_1';
+const PROPERTY_WEIGHT = 'VES_ZA_EDENITSU';
+const PROPERTY_CAPACITY = 'OBEM_ZA_EDENITSU';
+const PROPERTY_NAME = 'NAIMENOVANIE_NA_SAYTE';
+
+const INVISIBLE_PROPS = [
+    PROPERTY_NEW,
+    PROPERTY_WEIGHT,
+    PROPERTY_NAME,
+    PROPERTY_CAPACITY,
+    PROPERTY_ARTICLES
+];
 
 const PROPERTIES_SECTION = [
-  [
-      'NAME' => 'Подсветка',
-      'FIELDS' => [
-          'MOSHCHNOST',
-          'SVETOVOY_POTOK',
-          'TSVET_SVECHENIYA',
-          'NAPRYAZHENIE'
-      ]
-  ],[
-      'NAME' => 'Подсветка',
-      'FIELDS' => [
-          'VES_GRAMM',
-          'DLINA_UPAKOVKI_MM',
-          'SHIRINA_UPAKOVKI_MM',
-          'VYSOTA_UPAKOVKI_MM',
-          'RAZMERY_MM',
-          'RAZMER_UPAKOVKI_DKHSHKHV_MM'
-      ]
-  ]
+    [
+        'NAME' => 'Подсветка',
+        'FIELDS' => [
+            'MOSHCHNOST',
+            'SVETOVOY_POTOK',
+            'TSVET_SVECHENIYA',
+            'NAPRYAZHENIE'
+        ]
+    ],
+    [
+        'NAME' => 'Подсветка',
+        'FIELDS' => [
+            'VES_GRAMM',
+            'DLINA_UPAKOVKI_MM',
+            'SHIRINA_UPAKOVKI_MM',
+            'VYSOTA_UPAKOVKI_MM',
+            'RAZMERY_MM',
+            'RAZMER_UPAKOVKI_DKHSHKHV_MM'
+        ]
+    ]
 ];
 
 /**

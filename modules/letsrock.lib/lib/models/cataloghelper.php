@@ -3,6 +3,7 @@
 namespace Letsrock\Lib\Models;
 
 use Bitrix\Main\Loader;
+use CIBlockProperty;
 use CPrice;
 
 Loader::includeModule('iblock');
@@ -117,12 +118,14 @@ class CatalogHelper
 
         foreach (PROPERTIES_SECTION as $key => $section) {
             foreach ($section['FIELDS'] as $fieldCode) {
-                if (array_key_exists($fieldCode, $arResult['WITHOUT_SECTION'][0]['FIELDS'])) {
-                    $arResult['WITH_SECTION'][$key]['FIELDS'][$fieldCode] = $arResult['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode];
-                    unset($arResult['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode]);
+                if (!in_array($fieldCode, INVISIBLE_PROPS)) {
+                    if (array_key_exists($fieldCode, $arResult['WITHOUT_SECTION'][0]['FIELDS'])) {
+                        $arResult['WITH_SECTION'][$key]['FIELDS'][$fieldCode] = $arResult['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode];
+                        unset($arResult['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode]);
 
-                    if (empty($arResult['WITH_SECTION'][$key]['NAME'])) {
-                        $arResult['WITH_SECTION'][$key]['NAME'] = $section['NAME'];
+                        if (empty($arResult['WITH_SECTION'][$key]['NAME'])) {
+                            $arResult['WITH_SECTION'][$key]['NAME'] = $section['NAME'];
+                        }
                     }
                 }
             }
@@ -131,6 +134,57 @@ class CatalogHelper
         return $arResult;
     }
 
+    /**
+     * Убирает точку в названии свойства
+     *
+     * @param $propName
+     *
+     * @return mixed
+     */
+    public static function getClearName($propName):string {
+        if ($propName[0] == ".") {
+            $propName[0] = "";
+        }
+
+        return $propName;
+    }
+
+    /**
+     * Возвращает артикул по ИД товара
+     *
+     * @param $productId
+     *
+     * @return array|string
+     */
+    public static function getArticles($productId) {
+        $foundValue = '';
+        $rs = \CIBlockElement::GetList(
+            array(),
+            array(
+                "IBLOCK_ID" => IB_CATALOG,
+                'ID' => $productId
+            ),
+            false,
+            false,
+            array("ID", 'PROPERTY_' . PROPERTY_ARTICLES)
+        );
+
+        while ($res = $rs->GetNext()) {
+            if(stristr($res, 'UT')) {
+                $foundValue = $res;
+            }
+        }
+
+        return $foundValue;
+    }
+
+    /**
+     * Возвращает презентацию для раздела
+     *
+     * @param $sectionId
+     *
+     * @return string|null
+     */
     public static function getPresentation($sectionId)
     {
         $rsSect = \CIBlockSection::GetList([],
@@ -141,6 +195,25 @@ class CatalogHelper
         $data = $rsSect->GetNext();
 
         return \CFile::GetPath($data['UF_PRESENTATION']);
+    }
+
+    /**
+     * Возвращает коды нужных свойств (начинающихся с точки)
+     *
+     * @return array
+     */
+    public static function getAvailableProps():array
+    {
+        $foundProps = [];
+        $properties = CIBlockProperty::GetList([],
+            ["ACTIVE" => "Y", "IBLOCK_ID" => IB_CATALOG]);
+        while ($prop = $properties->GetNext()) {
+            if($prop["NAME"][0] == '.') {
+                $foundProps[] = $prop["CODE"];
+            }
+        }
+
+        return $foundProps;
     }
 }
 
