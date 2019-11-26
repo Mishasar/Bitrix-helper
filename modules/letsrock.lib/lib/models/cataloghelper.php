@@ -107,27 +107,37 @@ class CatalogHelper
     /**
      * Возвращает отсортированные по шаблону свойства
      *
-     * @param $arProps
+     * @param array $arProps
      *
      * @return array
      */
-    public static function sortProperties($arProps)
+    public static function sortProperties(array $arProps):array
     {
         $arResult = [];
-        $arResult['WITHOUT_SECTION'][0]['FIELDS'] = $arProps;
+        $arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'] = $arProps;
 
         foreach (PROPERTIES_SECTION as $key => $section) {
             foreach ($section['FIELDS'] as $fieldCode) {
                 if (!in_array($fieldCode, INVISIBLE_PROPS)) {
-                    if (array_key_exists($fieldCode, $arResult['WITHOUT_SECTION'][0]['FIELDS'])) {
-                        $arResult['WITH_SECTION'][$key]['FIELDS'][$fieldCode] = $arResult['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode];
-                        unset($arResult['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode]);
+                    if (array_key_exists($fieldCode, $arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'])) {
+                        $arResult['VIEW']['WITH_SECTION'][$key]['FIELDS'][$fieldCode] = $arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode];
+                        unset($arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode]);
 
-                        if (empty($arResult['WITH_SECTION'][$key]['NAME'])) {
-                            $arResult['WITH_SECTION'][$key]['NAME'] = $section['NAME'];
+                        if (empty($arResult['VIEW']['WITH_SECTION'][$key]['NAME'])) {
+                            $arResult['VIEW']['WITH_SECTION'][$key]['NAME'] = $section['NAME'];
                         }
                     }
+                } else {
+                    $arResult['HIDDEN']['FIELDS'][$fieldCode] = $arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode];
+                    unset($arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode]);
                 }
+            }
+        }
+
+        foreach ($arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'] as $fieldCode => $fieldValue) {
+            if (in_array($fieldCode, INVISIBLE_PROPS)) {
+                $arResult['HIDDEN']['FIELDS'][$fieldCode] = $arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode];
+                unset($arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'][$fieldCode]);
             }
         }
 
@@ -141,7 +151,8 @@ class CatalogHelper
      *
      * @return mixed
      */
-    public static function getClearName($propName):string {
+    public static function getClearName($propName): string
+    {
         if ($propName[0] == ".") {
             $propName[0] = "";
         }
@@ -152,30 +163,45 @@ class CatalogHelper
     /**
      * Возвращает артикул по ИД товара
      *
-     * @param $productId
+     * @param array $propsArray
      *
-     * @return array|string
+     * @return string
      */
-    public static function getArticles($productId) {
-        $foundValue = '';
-        $rs = \CIBlockElement::GetList(
-            array(),
-            array(
-                "IBLOCK_ID" => IB_CATALOG,
-                'ID' => $productId
-            ),
-            false,
-            false,
-            array("ID", 'PROPERTY_' . PROPERTY_ARTICLES)
-        );
+    public static function getArticles(array $propsArray): string
+    {
+        return $propsArray['HIDDEN']['FIELDS'][PROPERTY_ARTICLES]['VALUE'][2];
+    }
 
-        while ($res = $rs->GetNext()) {
-            if(stristr($res, 'UT')) {
-                $foundValue = $res;
-            }
+    /**
+     * Возвращает прикреплённые продукты
+     *
+     * @param array $propsArray
+     *
+     * @return array
+     */
+    public static function getAssociatedProducts(array $propsArray): array
+    {
+        if (!empty($propsArray['HIDDEN']['FIELDS'][PROPERTY_ASSOCIATED_PRODUCTS]['VALUE'])) {
+            return explode(',', $propsArray['HIDDEN']['FIELDS'][PROPERTY_ASSOCIATED_PRODUCTS]['VALUE']);
         }
 
-        return $foundValue;
+        return [];
+    }
+
+    /**
+     * Возвращает значение свойства новоинка
+     *
+     * @param array $propsArray
+     *
+     * @return bool
+     */
+    public static function productIsNew(array $propsArray): bool
+    {
+        if (!empty($propsArray['HIDDEN']['FIELDS'][PROPERTY_NEW])) {
+            return (bool)$propsArray['HIDDEN']['FIELDS'][PROPERTY_NEW]['VALUE'];
+        }
+
+        return false;
     }
 
     /**
@@ -202,16 +228,18 @@ class CatalogHelper
      *
      * @return array
      */
-    public static function getAvailableProps():array
+    public static function getAvailableProps(): array
     {
         $foundProps = [];
         $properties = CIBlockProperty::GetList([],
             ["ACTIVE" => "Y", "IBLOCK_ID" => IB_CATALOG]);
         while ($prop = $properties->GetNext()) {
-            if($prop["NAME"][0] == '.') {
+            if ($prop["NAME"][0] == '.') {
                 $foundProps[] = $prop["CODE"];
             }
         }
+
+        $foundProps = array_merge($foundProps, INVISIBLE_PROPS);
 
         return $foundProps;
     }
