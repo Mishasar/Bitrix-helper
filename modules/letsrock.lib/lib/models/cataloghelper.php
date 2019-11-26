@@ -111,7 +111,7 @@ class CatalogHelper
      *
      * @return array
      */
-    public static function sortProperties(array $arProps):array
+    public static function sortProperties(array $arProps): array
     {
         $arResult = [];
         $arResult['VIEW']['WITHOUT_SECTION'][0]['FIELDS'] = $arProps;
@@ -151,13 +151,32 @@ class CatalogHelper
      *
      * @return mixed
      */
-    public static function getClearName($propName): string
+    public static function getClearName(string $propName): string
     {
         if ($propName[0] == ".") {
             $propName[0] = "";
         }
 
         return $propName;
+    }
+
+    /**
+     * Возвращает цвет свечения в процентах для построения шкалы
+     *
+     * @param string $propValue
+     *
+     * @return int
+     */
+    public static function getLightPosition(string $propValue): int
+    {
+        if (empty($propValue)) {
+            return 0;
+        }
+
+        $lightDeg = intval($propValue);
+        $lightDeg = $lightDeg - COLOR_LIGHT_LEFT_BORDER_DEG;
+
+        return (int)(($lightDeg / (COLOR_LIGHT_RIGHT_BORDER_DEG - COLOR_LIGHT_LEFT_BORDER_DEG)) * 100);
     }
 
     /**

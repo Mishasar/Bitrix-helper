@@ -112,7 +112,14 @@ $name = $sortProps['HIDDEN']['FIELDS']['NAIMENOVANIE_NA_SAYTE']['VALUE'];
                                             <? foreach ($propSection['FIELDS'] as $property): ?>
                                                 <div class="catalog-detail__options-row">
                                                     <div class="catalog-detail__options-key"><?= CatalogHelper::getClearName($property['NAME']) ?></div>
-                                                    <div class="catalog-detail__options-line"></div>
+                                                    <? if ($property['CODE'] != PROPERTY_COLOR_LIGHT): ?>
+                                                        <div class="catalog-detail__options-line"></div>
+                                                    <? else: ?>
+                                                        <div class="catalog-detail__options-scale">
+                                                            <div class="catalog-detail__options-aim"
+                                                                 style="left: <?=CatalogHelper::getLightPosition($property['DISPLAY_VALUE'])?>%"></div>
+                                                        </div>
+                                                    <? endif; ?>
                                                     <div class="catalog-detail__options-value"><?= (is_array($property['DISPLAY_VALUE'])
                                                             ? implode(' / ', $property['DISPLAY_VALUE'])
                                                             : $property['DISPLAY_VALUE']) ?></div>
