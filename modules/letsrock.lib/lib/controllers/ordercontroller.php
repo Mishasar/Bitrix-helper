@@ -84,6 +84,10 @@ class OrderController extends Controller
             $arFields['PREVIEW_PICTURE'] = CFile::ResizeImageGet($arFields["PREVIEW_PICTURE"],
                 ["width" => 64, "height" => 64], BX_RESIZE_IMAGE_PROPORTIONAL);
 
+            if (empty($arFields['PREVIEW_PICTURE'])) {
+                $arFields['PREVIEW_PICTURE']['src'] = IMG_DEFAULT;
+            }
+
             if (empty($arFields[PROPERTY_ARTICLES . '_VALUE'])) {
                 $arFields['ARTICLE'] = $arFields[PROPERTY_ARTICLES . '_VALUE'];
             } else {
@@ -261,7 +265,8 @@ class OrderController extends Controller
      *
      * @return \Bitrix\Main\EventResult
      */
-    public static function orderBonusHandler(\Bitrix\Main\Event $event) {
+    public static function orderBonusHandler(\Bitrix\Main\Event $event)
+    {
         $parameters = $event->getParameters();
         if ($parameters['VALUE'] === 'F') {
             /** @var \Bitrix\Sale\Order $order */
@@ -272,9 +277,9 @@ class OrderController extends Controller
             $bonusCount = $bonusModel->getBonusCountByMoney($price, 1);
 
             BonusTransaction::depositBonus([
-                'BONUS'=> $bonusCount,
-                'USER'=> $order->getUserId(),
-                'ORDER'=> $order->getId(),
+                'BONUS' => $bonusCount,
+                'USER' => $order->getUserId(),
+                'ORDER' => $order->getId(),
             ]);
         }
 

@@ -275,6 +275,9 @@ class Basket
             $arFields = $item->GetFields();
             $arFields['PREVIEW_PICTURE'] = CFile::ResizeImageGet($arFields["PREVIEW_PICTURE"],
                 ["width" => 64, "height" => 64], BX_RESIZE_IMAGE_PROPORTIONAL);
+            if ($arFields["PREVIEW_PICTURE"]) {
+                $arFields['PREVIEW_PICTURE']['src'] = IMG_DEFAULT;
+            }
             $arProducts[$arFields['ID']] = $arFields;
         }
 

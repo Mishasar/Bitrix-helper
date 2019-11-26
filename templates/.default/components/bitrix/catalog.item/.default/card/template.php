@@ -21,11 +21,16 @@
  * @var string $buttonSizeClass
  * @var CatalogSectionComponent $component
  */
+$smallImage = [];
 
-$smallImage = CFile::ResizeImageGet($item['DETAIL_PICTURE'],
-    ['width' => 240, 'height' => 240],
-    BX_RESIZE_IMAGE_PROPORTIONAL,
-    true);
+if(!empty($item['DETAIL_PICTURE'])) {
+    $smallImage = CFile::ResizeImageGet($item['DETAIL_PICTURE'],
+        ['width' => 240, 'height' => 240],
+        BX_RESIZE_IMAGE_PROPORTIONAL,
+        true);
+} else {
+    $smallImage['src'] = IMG_DEFAULT;
+}
 
 $prices = \Letsrock\Lib\Models\CatalogHelper::getElementPrice($actualItem['ID']);
 $newLabel = !empty($item['PROPERTIES'][PROPERTY_NEW]['VALUE_XML_ID']) ? true : false;

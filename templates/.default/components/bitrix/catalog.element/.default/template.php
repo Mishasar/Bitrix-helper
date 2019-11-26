@@ -26,10 +26,15 @@ $saleSize = CatalogHelper::getSale($prices['NORMAL_PRICE']['PRICE'],
 
 $arResult['PROPERTIES']['MORE_PHOTO']['VALUE'][] = $arResult['DETAIL_PICTURE']['ID'];
 
-$imagesBig = Helper::getArrayImages($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'],
-    ["width" => 1000, "height" => 1000]);
-$imagesSmall = Helper::getArrayImages($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'],
-    ["width" => 300, "height" => 300]);
+if (empty($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'][0]) || empty($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'][0])) {
+    $imagesBig[]['src'] = IMG_DEFAULT;
+    $imagesSmall[]['src'] = IMG_DEFAULT;
+} else {
+    $imagesBig = Helper::getArrayImages($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'],
+        ["width" => 1000, "height" => 1000]);
+    $imagesSmall = Helper::getArrayImages($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'],
+        ["width" => 300, "height" => 300]);
+}
 
 $sortProps = CatalogHelper::sortProperties($arResult['DISPLAY_PROPERTIES']);
 
@@ -117,7 +122,7 @@ $name = $sortProps['HIDDEN']['FIELDS']['NAIMENOVANIE_NA_SAYTE']['VALUE'];
                                                     <? else: ?>
                                                         <div class="catalog-detail__options-scale">
                                                             <div class="catalog-detail__options-aim"
-                                                                 style="left: <?=CatalogHelper::getLightPosition($property['DISPLAY_VALUE'])?>%"></div>
+                                                                 style="left: <?= CatalogHelper::getLightPosition($property['DISPLAY_VALUE']) ?>%"></div>
                                                         </div>
                                                     <? endif; ?>
                                                     <div class="catalog-detail__options-value"><?= (is_array($property['DISPLAY_VALUE'])
@@ -320,10 +325,7 @@ $name = $sortProps['HIDDEN']['FIELDS']['NAIMENOVANIE_NA_SAYTE']['VALUE'];
                     "USE_PRODUCT_QUANTITY" => "N"
                 ]
             ); ?>
-
         </div>
     </section>
-
-
 <?
 unset($actualItem, $itemIds, $jsParams);

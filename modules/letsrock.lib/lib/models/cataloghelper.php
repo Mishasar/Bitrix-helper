@@ -153,8 +153,8 @@ class CatalogHelper
      */
     public static function getClearName(string $propName): string
     {
-        if ($propName[0] == ".") {
-            $propName[0] = "";
+        if ($propName{0} == ".") {
+            $propName{0} = "";
         }
 
         return $propName;

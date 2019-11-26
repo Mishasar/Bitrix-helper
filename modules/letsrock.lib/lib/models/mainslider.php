@@ -45,6 +45,10 @@ class MainSlider
             foreach ($arFields as $key => $row) {
                 $arFields[$key]['PREVIEW_PICTURE'] = CFile::ResizeImageGet($row["PREVIEW_PICTURE"],
                     ["width" => 700, "height" => 500], BX_RESIZE_IMAGE_PROPORTIONAL);
+
+                if ($row["PREVIEW_PICTURE"]) {
+                    $arFields[$key]['PREVIEW_PICTURE']['src'] = IMG_DEFAULT;
+                }
             }
 
             return $arFields;

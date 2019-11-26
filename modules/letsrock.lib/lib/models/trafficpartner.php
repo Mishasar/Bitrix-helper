@@ -33,6 +33,10 @@ class TrafficPartner
             foreach ($arFields as $key => $row) {
                 $arFields[$key]['PREVIEW_PICTURE'] = CFile::ResizeImageGet($row["PREVIEW_PICTURE"],
                     ["width" => 150, "height" => 80], BX_RESIZE_IMAGE_PROPORTIONAL);
+
+                if ($row["PREVIEW_PICTURE"]) {
+                    $arFields[$key]['PREVIEW_PICTURE']['src'] = IMG_DEFAULT;
+                }
             }
 
             return $arFields;
