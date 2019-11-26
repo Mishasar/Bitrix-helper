@@ -16,3 +16,4 @@ require_once(dirname(__FILE__) . '/../../include/templates/header.php');
     </div>
 </section>
 <section class="section">
+    <div class="container">
