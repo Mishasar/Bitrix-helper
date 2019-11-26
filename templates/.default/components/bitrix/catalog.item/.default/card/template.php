@@ -28,12 +28,15 @@ $smallImage = CFile::ResizeImageGet($item['DETAIL_PICTURE'],
     true);
 
 $prices = \Letsrock\Lib\Models\CatalogHelper::getElementPrice($actualItem['ID']);
+$newLabel = !empty($item['PROPERTIES'][PROPERTY_NEW]['VALUE_XML_ID']) ? true : false;
+$productTitle = !empty($item['PROPERTIES'][PROPERTY_NAME]['VALUE'])? $item['PROPERTIES'][PROPERTY_NAME]['VALUE'] : $productTitle;
 ?>
-
-<div class="card__new" style="border: 1px solid red;">Новинка</div>
+<? if ($newLabel): ?>
+    <div class="card__new">Новинка</div>
+<? endif; ?>
 <a class="card__title" href="<?= $item['DETAIL_PAGE_URL'] ?>"><?= $productTitle ?></a>
 <a class="card__img" href="<?= $item['DETAIL_PAGE_URL'] ?>">
-    <img src="<?= $smallImage['src'] ?>" alt="<?= $productTitle ?>" title="<?= $imgTitle ?>">
+    <img src="<?= $smallImage['src'] ?>" alt="<?= $productTitle  ?>" title="<?= $productTitle ?>">
 </a>
 <? if ($USER->IsAuthorized()): ?>
     <div class="card__bottom">

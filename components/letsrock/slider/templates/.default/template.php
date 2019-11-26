@@ -38,7 +38,7 @@
                             <div class="sidebar-links__go-over">перейти</div>
                         </div>
                     </a>
-                    <a class="sidebar-links__item" href="#" style="border: 1px solid red">
+                    <a class="sidebar-links__item" href="/catalog/new-products/">
                         <div class="sidebar-links__inner">
                             <div class="sidebar-links__title">Новые поступления</div>
                             <div class="sidebar-links__go-over">перейти</div>
