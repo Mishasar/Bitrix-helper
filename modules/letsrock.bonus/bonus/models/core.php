@@ -28,6 +28,7 @@ abstract class Core
     public function __construct($userId)
     {
         $this->userId = $userId;
+        $this->month = Helper::getMonthByUser($userId);
         $this->bonusSystemByMonth = $this->getBonusesStructure();
     }
 
@@ -118,6 +119,42 @@ abstract class Core
     }
 
     /**
+     * Возвращает количество бонусов потраченное пользователем за месяц
+     *
+     * @param \Bitrix\Main\Type\DateTime $date Дата начала месяца
+     *
+     * @return int
+     */
+    protected function getMonthWithdrawBonuses(\Bitrix\Main\Type\DateTime $date)
+    {
+        try {
+            $bonusCount = 0;
+            Loader::IncludeModule('highloadblock');
+            $hlBlock = HighloadBlockTable::getById(self::HL_BONUS_TRANSACTION)->fetch();
+            $entity = HighloadBlockTable::compileEntity($hlBlock);
+            $entityDataClass = $entity->getDataClass();
+
+            $transactions = $entityDataClass::getList([
+                'select' => ['UF_USER', 'UF_SIGN', 'UF_BONUS', 'UF_DATE'],
+                'filter' => [
+                    ">UF_DATE" => $date,
+                    '=UF_USER' => $this->userId,
+                    "=UF_SIGN" => 0
+                ]
+            ])->fetchAll();
+
+            foreach ($transactions as $transaction) {
+                $bonusCount += $transaction['UF_BONUS'];
+            }
+
+            return $bonusCount;
+        } catch (\Exception $e) {
+            AddMessage2Log($e->getMessage(), "letsrock.bonus");
+            return 0;
+        }
+    }
+
+    /**
      * Возвращает сумму потраченную пользователем в текущем месяце
      *
      * @param \Bitrix\Main\Type\DateTime $date
@@ -141,8 +178,8 @@ abstract class Core
         }
     }
 
-    /**Возвращает текущий месяц пользователя
-     *
+    /**
+     * Возвращает текущий месяц пользователЯ
      *
      * @return \Bitrix\Main\Type\DateTime
      */
@@ -152,7 +189,7 @@ abstract class Core
 
         try {
             //Разрабатываемая система подразумевает двойной первый месяц
-            if ($month == 1) {
+            if ($month < 2) {
                 $date = new DateTime(date('m/1/Y', strtotime('-1 months')));
             } else {
                 $date = new DateTime(date('m/1/Y', strtotime('today')));
@@ -172,13 +209,13 @@ abstract class Core
      *
      * @return int
      */
-    protected function getBonusCountByMoney(int $moneyCount)
+    public function getBonusCountByPrice(int $moneyCount)
     {
         $startDate = $this->getUserRegData();
         $monthOrdersCost = $this->getMonthOrdersCost($startDate);
         $monthOrdersCost += $moneyCount; //Новая покупка ещё не входит месячную сумму
         $monthDepositBonuses = $this->getMonthDepositBonuses($startDate);
-        $bonusCount = Helper::getBonusCountByMoney($monthOrdersCost, $this->month, $this->bonusSystemByMonth);
+        $bonusCount = Helper::getBonusCountByMoney(intval($monthOrdersCost), $this->month, $this->bonusSystemByMonth);
         $bonusDiff = $bonusCount - $monthDepositBonuses;
 
         if ($bonusDiff > 0) {

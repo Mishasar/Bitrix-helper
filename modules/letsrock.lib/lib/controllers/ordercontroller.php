@@ -11,6 +11,7 @@ use CFile;
 use CIBlockElement;
 use Letsrock\Lib\Models\BonusTransaction;
 use Letsrock\Lib\Models\CatalogHelper;
+use mysql_xdevapi\Exception;
 
 Loader::includeModule('sale');
 Loader::includeModule("catalog");

@@ -2,6 +2,9 @@
 
 namespace Letsrock\Bonus;
 
+use Bitrix\Main\UserTable;
+use DateTime;
+
 /**
  * Class Helper
  *
@@ -154,9 +157,27 @@ class Helper
 
             $arUser = $result->fetch();
 
-            return $arUser['UF_BONUS_DATE'];
+            if (empty($arUser['UF_BONUS_DATE'])) {
+                throw new \Exception('Нет даты у бонусной транзакции');
+            }
+            /**
+             * \Bitrix\Main\Type\DateTime $dateReg
+             */
+            $dateReg = $arUser['UF_BONUS_DATE']->getTimestamp();
+            $dateForFirstMonth = new DateTime(date('m/1/Y', strtotime('-1 months')));
+
+            if ($dateForFirstMonth->getTimestamp() < $dateReg) {
+                return 1; //Первые 2 календырных месяца == 1 месяц
+            }
+
+            $dateDiff = time() - $dateReg;
+            $monthsCount = intval($dateDiff / 60 / 60 / 24 / 30); //Количество месяцев
+
+
+            return $monthsCount;
         } catch (\Exception $e) {
             AddMessage2Log($e->getMessage(), "letsrock.bonus");
+
             return 0;
         }
     }

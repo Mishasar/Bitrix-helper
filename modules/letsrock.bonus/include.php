@@ -12,5 +12,6 @@ defined('B_PROLOG_INCLUDED') and (B_PROLOG_INCLUDED === true) or die();
         "Letsrock\\Bonus\\Withdraw" => "bonus/models/withdraw.php",
         "Letsrock\\Bonus\\Transaction" => "bonus/models/transaction.php",
         "Letsrock\\Bonus\\Core" => "bonus/models/core.php",
+        "Letsrock\\Bonus\\Information" => "bonus/models/information.php",
     )
 );

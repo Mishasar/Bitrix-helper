@@ -3,7 +3,6 @@ namespace Letsrock\Bonus;
 
 use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\Loader;
-use Bitrix\Main\SystemException;
 
 /**
  * Базовый класс транзакции
@@ -14,7 +13,16 @@ abstract class Transaction extends Core
 {
     /**
      * Transaction constructor.
-     * В качестве аргумента принимает массив параметров со структурой
+     *
+     * @param int $userId
+     */
+    public function __construct(int $userId)
+    {
+        parent::__construct($userId);
+    }
+
+    /**
+     * В качестве аргумента принимает массив параметров со структурой:
      *
      * array
      *      ['SIGN']    Знак транзации. Значения 1 обозначает зачисление, 0 спимание.
@@ -25,11 +33,10 @@ abstract class Transaction extends Core
      * @param array $params
      * @param int $userId
      *
-     * @throws \Bitrix\Main\LoaderException
+     * @return bool
      */
-    public function __construct(array $params, int $userId)
+    protected function createTransaction(array $params)
     {
-        parent::__construct($userId);
 
         try {
             Loader::IncludeModule('highloadblock');
@@ -37,8 +44,8 @@ abstract class Transaction extends Core
             $entity = HighloadBlockTable::compileEntity($hlBlock);
             $entityDataClass = $entity->getDataClass();
             $result = $entityDataClass::add($params);
-        } catch (SystemException $e) {
-            AddMessage2Log($e->getMessage(), "highloadblock");
+        } catch (\Exception $e) {
+            AddMessage2Log($e->getMessage(), "letsrock.bonus");
             return false;
         }
 
