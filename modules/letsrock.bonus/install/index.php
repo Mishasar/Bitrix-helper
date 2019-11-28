@@ -6,14 +6,11 @@ use Bitrix\Main\ModuleManager;
 
 Loc::loadMessages(__FILE__);
 
-if (class_exists('letsrock_lib')) {
+if (class_exists('letsrock_bonus')) {
     return;
 }
 
-/**
- * Class letsrock_lib
- */
-class letsrock_lib extends CModule
+class letsrock_bonus extends CModule
 {
     /** @var string */
     public $MODULE_ID;
@@ -41,14 +38,14 @@ class letsrock_lib extends CModule
 
     public function __construct()
     {
-        $this->MODULE_ID = 'letsrock.lib';
+        $this->MODULE_ID = 'letsrock.bonus';
         $this->MODULE_VERSION = '0.0.1';
-        $this->MODULE_VERSION_DATE = '2018-08-15 00:00:00';
-        $this->MODULE_NAME = Loc::getMessage('LETSROCK_MODULE_NAME');
-        $this->MODULE_DESCRIPTION = Loc::getMessage('LETSROCK_MODULE_DESCRIPTION');
+        $this->MODULE_VERSION_DATE = '2019-08-15 00:00:00';
+        $this->MODULE_NAME = Loc::getMessage('BONUS_MODULE_NAME');
+        $this->MODULE_DESCRIPTION = Loc::getMessage('BONUS_MODULE_DESCRIPTION');
         $this->MODULE_GROUP_RIGHTS = 'N';
-        $this->PARTNER_NAME = "letsrock.pro";
-        $this->PARTNER_URI = "";
+        $this->PARTNER_NAME = "Letsrock";
+        $this->PARTNER_URI = "letsrock.pro";
     }
 
     public function doInstall()

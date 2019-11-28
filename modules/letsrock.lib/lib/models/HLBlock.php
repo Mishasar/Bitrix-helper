@@ -2,24 +2,40 @@
 
 namespace Letsrock\Lib\Models;
 
-use Bitrix\Main\Loader;
 use Bitrix\Highloadblock as HL;
+use Bitrix\Main\Loader;
 
 Loader::includeModule('iblock');
 
-class HLBlock {
+/**
+ * Class HLBlock
+ *
+ * @package Letsrock\Lib\Models
+ */
+class HLBlock
+{
     private $hlblock;
     private $entity;
     private $entityClass;
 
-    function __construct($id) {
+    function __construct($id)
+    {
         Loader::IncludeModule('highloadblock');
         $this->hlblock = HL\HighloadBlockTable::getById($id)->fetch(); // id highload блока
         $this->entity = HL\HighloadBlockTable::compileEntity($this->hlblock);
         $this->entityClass = $this->entity->getDataClass();
     }
 
-    function getSingleItemById($itemId) {
+    /**
+     * @param $itemId
+     *
+     * @return array|bool|false
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
+     */
+    function getSingleItemById($itemId)
+    {
         $res = $this->entityClass::getList([
             'select' => ['*'],
             'filter' => ['ID' => $itemId],
@@ -34,7 +50,17 @@ class HLBlock {
         return $item;
     }
 
-    function get($filter = [], $select = ['*']) {
+    /**
+     * @param array $filter
+     * @param array $select
+     *
+     * @return array|bool
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
+     */
+    function get($filter = [], $select = ['*'])
+    {
         $res = $this->entityClass::getList([
             'select' => $select,
             'filter' => $filter,
@@ -53,7 +79,8 @@ class HLBlock {
         return $list;
     }
 
-    function add($params) {
+    function add($params)
+    {
         return $this->entityClass::add($params);
     }
 }

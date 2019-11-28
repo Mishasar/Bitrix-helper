@@ -15,7 +15,7 @@ use Letsrock\Lib\Models\CatalogHelper;
 Loader::includeModule('sale');
 Loader::includeModule("catalog");
 
-/*
+/**
  * Class OrderController
  * Контроллер заказа
  */
@@ -29,7 +29,10 @@ class OrderController extends Controller
      * @param $orderId
      *
      * @return array
+     * @throws \Bitrix\Main\ArgumentException
      * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
      */
     public static function getOrder($orderId)
     {
