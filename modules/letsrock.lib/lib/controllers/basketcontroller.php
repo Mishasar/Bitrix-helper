@@ -7,17 +7,76 @@ use Bitrix\Main\Context;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Basket;
 use Bitrix\Sale\Order;
+use Letsrock\Bonus\Withdraw;
+use Letsrock\Lib\Models\User;
 
 Loader::includeModule('sale');
+Loader::includeModule('letsrock.bonus');
 Loader::includeModule("catalog");
 
-/*
+/**
  * Class BasketController
  * Контроллер корзины
  */
-
 class BasketController extends Controller
 {
+    /**
+     * Ajax
+     *
+     * @param $request
+     */
+    public static function addBonusProduct($request)
+    {
+        global $USER;
+        $userId = $USER->GetID();
+        $arSelect = ["ID", "IBLOCK_ID", "NAME", "DATE_ACTIVE_FROM", 'PROPERTY_' . PROPERTY_BONUS_COST];
+        $arFilter = [
+            "IBLOCK_ID" => IntVal(IB_BONUS_CATALOG),
+            "ACTIVE_DATE" => "Y",
+            "ACTIVE" => "Y",
+            'ID' => $request["PRODUCT_ID"]
+        ];
+        $res = \CIBlockElement::GetList([], $arFilter, false, ["nPageSize" => 50], $arSelect);
+        $ob = $res->GetNextElement();
+
+        if (empty($ob)) {
+            throw new \Exception('Empty product');
+        }
+        $arProductInfo = $ob->GetFields();
+
+        $arProduct = $ob->GetProperties();
+        $bonusPrice = $arProduct[PROPERTY_BONUS_COST];
+        $withdrawModel = new Withdraw((int)$userId, (int)$bonusPrice['VALUE']);
+
+        $managerInfo = User::getManager();
+        $arEventFields = [
+            "USER" => $USER->GetFormattedName(),
+            "PRODUCT" => $arProductInfo['NAME'],
+            "EMAIL_TO" => $managerInfo['EMAIL']
+        ];
+
+        \CEvent::Send("NEW_BONUS_REQUEST", "s1", $arEventFields, "Y");
+
+        $el = new \CIBlockElement;
+        $PROP = [];
+        $PROP['USER'] = $USER->GetID();
+        $PROP['PRODUCT'] = $request["PRODUCT_ID"];
+
+        $arLoadProductArray = [
+            "IBLOCK_SECTION_ID" => false,
+            "IBLOCK_ID" => IB_BONUS_REQUEST,
+            "PROPERTY_VALUES" => $PROP,
+            "NAME" => "Новая заявка",
+            "ACTIVE" => "Y",
+        ];
+
+        if (!$el->Add($arLoadProductArray)) {
+            echo Controller::sendError(current($el->LAST_ERROR));
+        } else {
+            echo Controller::sendAnswer();
+        }
+    }
+
     /**
      * AJAX
      * Добавляет товар в корзину

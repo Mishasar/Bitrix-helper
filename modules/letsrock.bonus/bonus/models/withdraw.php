@@ -26,7 +26,7 @@ class Withdraw extends Transaction
                 'UF_SIGN' => 0,
                 'UF_BONUS' => $bonusCount,
                 'UF_USER' => $userId,
-                'UF_DATE' => time()
+                'UF_DATE' => date('m.d.y')
             ]);
 
             return $resultAddTransaction;

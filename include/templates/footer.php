@@ -105,6 +105,16 @@
             </div>
         </div>
     </div>
+    <div class="modal modal__auth js-modal" data-modal-type="buy-bonus">
+        <div class="modal__inner">
+            <div class="modal__head">
+                <div class="modal__title">Спасибо</div>
+            </div>
+            <p class="modal__content modal__content_light">
+                В ближайшее время с вами свяжется менеджер.
+            </p>
+        </div>
+    </div>
 </div>
 </div>
 </body>

@@ -19,6 +19,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute(['POST'], '/ajax/catalog/getModal/', 'Letsrock\Lib\Controllers\CatalogController/getRenderModal');
     $r->addRoute(['POST'], '/ajax/basket/order/', 'Letsrock\Lib\Controllers\BasketController/order');
     $r->addRoute(['POST'], '/ajax/order/repeat/', 'Letsrock\Lib\Controllers\OrderController/repeat');
+    $r->addRoute(['POST'], '/ajax/basket/addBonusProduct/', 'Letsrock\Lib\Controllers\BasketController/addBonusProduct');
 });
 
 //___________________________
