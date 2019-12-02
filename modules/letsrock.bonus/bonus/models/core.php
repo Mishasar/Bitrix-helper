@@ -29,7 +29,7 @@ abstract class Core
     {
         $this->userId = $userId;
         $this->month = Helper::getMonthByUser($userId);
-        $this->bonusSystemByMonth = $this->getBonusesStructure();
+        $this->bonusSystemByMonth = $this->setBonusesStructure();
     }
 
     /**
@@ -47,7 +47,7 @@ abstract class Core
      *
      * @return array
      */
-    private function getBonusesStructure(): array
+    private function setBonusesStructure(): array
     {
         $arFields = [];
         $arResult = [];

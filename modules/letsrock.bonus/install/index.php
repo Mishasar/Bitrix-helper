@@ -39,8 +39,8 @@ class letsrock_bonus extends CModule
     public function __construct()
     {
         $this->MODULE_ID = 'letsrock.bonus';
-        $this->MODULE_VERSION = '0.0.1';
-        $this->MODULE_VERSION_DATE = '2019-08-15 00:00:00';
+        $this->MODULE_VERSION = '0.1';
+        $this->MODULE_VERSION_DATE = '2019-11-28 00:00:00';
         $this->MODULE_NAME = Loc::getMessage('BONUS_MODULE_NAME');
         $this->MODULE_DESCRIPTION = Loc::getMessage('BONUS_MODULE_DESCRIPTION');
         $this->MODULE_GROUP_RIGHTS = 'N';

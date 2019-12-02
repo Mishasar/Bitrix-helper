@@ -1,19 +1,26 @@
 <?
 
 use Bitrix\Main\EventManager;
+use \Bitrix\Main\Loader;
 
 include $_SERVER["DOCUMENT_ROOT"] . '/local/php_interface/const/userConstants.php';
 require $_SERVER["DOCUMENT_ROOT"] . '/local/vendor/autoload.php';
-\Bitrix\Main\Loader::includeModule('letsrock.lib');
-\Bitrix\Main\Loader::includeModule('sale');
+Loader::includeModule('letsrock.lib');
+Loader::includeModule('letsrock.bonus');
+Loader::includeModule('sale');
 
-\Bitrix\Main\EventManager::getInstance()->addEventHandler(
+EventManager::getInstance()->addEventHandler(
     'sale',
     'OnSaleStatusOrderChange',
-    ['Letsrock\\Lib\\Controllers\\OrderController', 'orderBonusHandler']);
+    ['Letsrock\\Bonus\\Controller', 'orderBonusHandler']);
+
+EventManager::getInstance()->addEventHandler(
+    'sale',
+    'OnSaleOrderBeforeSaved',
+    ['Letsrock\\Bonus\\Controller', 'OnSaleOrderBeforeSavedHandler']);
 
 //  Проверяем пришел ли email или login и если email авторизуем по нему
-\Bitrix\Main\EventManager::getInstance()->addEventHandler(
+EventManager::getInstance()->addEventHandler(
     'main',
     'OnBeforeUserLogin',
     ['Letsrock\\Lib\\Controllers\\OrderController', 'DoBeforeUserLoginHandler']);

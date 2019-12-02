@@ -12,10 +12,10 @@ use Bitrix\Sale\Order;
 class Withdraw extends Transaction
 {
     /**
-     * Deposit constructor.
+     * Withdraw constructor.
      *
      * @param int $userId
-     * @param int $orderId
+     * @param int $bonusCount
      */
     public function __construct(int $userId, int $bonusCount)
     {

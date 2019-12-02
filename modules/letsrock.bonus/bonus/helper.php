@@ -68,7 +68,7 @@ class Helper
      */
     public static function changeBonusInUser(int $userId, int $bonusCount, bool $add = true)
     {
-        $result = \Bitrix\Main\UserTable::getList([
+        $result = UserTable::getList([
             'select' => ['NAME', 'ID', 'UF_BONUS'],
             'filter' => ['=ID' => $userId]
         ]);
@@ -107,8 +107,8 @@ class Helper
         $month = Helper::findLeftBorderInArray($bonusSystemByMonth, $monthUser);
         $bonusBorder = Helper::findLeftBorderInArray($bonusSystemByMonth[$month]['ELEMENTS'], $countMoney);
 
-        if (!empty($bonusSystemByMonth[$month]['ELEMENTS'][$bonusBorder]['PROPERTY_COUNT_MONEY_VALUE'])) {
-            return $bonusSystemByMonth[$month]['ELEMENTS'][$bonusBorder]['PROPERTY_COUNT_MONEY_VALUE'];
+        if (!empty($bonusSystemByMonth[$month]['ELEMENTS'][$bonusBorder]['PROPERTY_COUNT_BONUSES_VALUE'])) {
+            return $bonusSystemByMonth[$month]['ELEMENTS'][$bonusBorder]['PROPERTY_COUNT_BONUSES_VALUE'];
         } else {
             return 0;
         }
@@ -150,7 +150,7 @@ class Helper
     public static function getMonthByUser(int $userId)
     {
         try {
-            $result = \Bitrix\Main\UserTable::getList([
+            $result = UserTable::getList([
                 'select' => ['NAME', 'ID', 'UF_BONUS_DATE'],
                 'filter' => ['=ID' => $userId]
             ]);

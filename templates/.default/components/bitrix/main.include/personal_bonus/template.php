@@ -14,7 +14,7 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 $this->setFrameMode(true); ?>
 <div class="cabinet-head">
     <div class="cabinet-head__bonus">
-        Бонусов:<b>0</b></div>
+        Бонусов:<b><?=$countBonuses?></b></div>
     <a class="cabinet-logout" href="/?logout=yes">Выйти</a>
 </div>
 <div class="cabinet-body">

@@ -25,11 +25,11 @@ class Information extends Core
      *
      * @return mixed
      */
-    protected function getCountBonuses()
+    public function getCountBonuses()
     {
         try {
             $result = \Bitrix\Main\UserTable::getList([
-                'select' => ['NAME', 'ID', 'UF_BONUS_DATE'],
+                'select' => ['NAME', 'ID', 'UF_BONUS'],
                 'filter' => ['=ID' => $this->userId]
             ]);
 
@@ -41,5 +41,12 @@ class Information extends Core
         }
     }
 
-
+    /**
+     * Возвращает массив бонусов (см. функцию Core::setBonusesStructure)
+     *
+     * @return mixed
+     */
+    public function getBonusesStructure() {
+        return $this->bonusSystemByMonth;
+    }
 }

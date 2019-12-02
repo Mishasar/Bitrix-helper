@@ -11,27 +11,30 @@ use Bitrix\Sale\Order;
  */
 class Deposit extends Transaction
 {
+
     /**
-     * Deposit constructor.
+     * Deposit constructor
      *
-     * @param int $userId
-     * @param int $orderId
+     * @param Order $order Заказ битрикса
+     *
+     * @param bool $revert Отмена заказа
      */
-    public function __construct(int $userId, int $orderId)
+    public function __construct(Order $order, $revert = false)
     {
         try {
+            $userId = $order->getUserId();
             parent::__construct($userId);
-
-            $order = Order::load($orderId);
             $dataInsert = $order->getDateInsert();
             $price = $order->getPrice();
             $bonus = $this->getBonusCountByPrice($price);
             Helper::changeBonusInUser($userId, $bonus);
+            $sign = $revert ? 0 : 1;
+
             $resultAddTransaction = $this->createTransaction([
-                'UF_SIGN' => 1,
+                'UF_SIGN' => $sign,
                 'UF_BONUS' => $bonus,
                 'UF_USER' => $userId,
-                'UF_ORDER' => $orderId,
+                'UF_ORDER' => $order->getId(),
                 'UF_DATE' => $dataInsert->toString()
             ]);
 

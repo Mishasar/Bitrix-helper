@@ -261,34 +261,4 @@ class OrderController extends Controller
 
         return $statuses;
     }
-
-    /**
-     * Обработчик события смены статуса
-     *
-     * @param \Bitrix\Main\Event $event
-     *
-     * @return \Bitrix\Main\EventResult
-     */
-    public static function orderBonusHandler(\Bitrix\Main\Event $event)
-    {
-        $parameters = $event->getParameters();
-        if ($parameters['VALUE'] === 'F') {
-            /** @var \Bitrix\Sale\Order $order */
-            $order = $parameters['ENTITY'];
-
-            $price = $order->getPrice();
-            $bonusModel = new BonusSystemController();
-            $bonusCount = $bonusModel->getBonusCountByMoney($price, 1);
-
-            BonusTransaction::depositBonus([
-                'BONUS' => $bonusCount,
-                'USER' => $order->getUserId(),
-                'ORDER' => $order->getId(),
-            ]);
-        }
-
-        return new \Bitrix\Main\EventResult(
-            \Bitrix\Main\EventResult::SUCCESS
-        );
-    }
 }
