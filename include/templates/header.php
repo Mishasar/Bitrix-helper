@@ -8,7 +8,8 @@
     use Bitrix\Main\Page\Asset;
 
     CUtil::InitJSCore();
-    CJSCore::Init(['ajax', 'json', 'ls', 'session', 'jquery', 'popup', 'pull']);
+
+
     Asset::getInstance()->addString('<link rel="shortcut icon" href="' . ASSETS_PATH . 'img/favicons/favicon.ico" type="image/x-icon">');
     Asset::getInstance()->addString('<link rel="apple-touch-icon" href="' . ASSETS_PATH . 'img/favicons/apple-touch-icon.png">');
     Asset::getInstance()->addString('<link rel="apple-touch-icon" sizes="57x57" href="' . ASSETS_PATH . 'img/favicons/apple-touch-icon-57x57.png">');
@@ -22,7 +23,12 @@
     //Подключаем статику
     Asset::getInstance()->addCss(ASSETS_PATH . "styles/main.min.css");
     Asset::getInstance()->addJs(ASSETS_PATH . "js/main.min.js");
+
+
     Asset::getInstance()->addJs("https://api-maps.yandex.ru/2.1/?lang=ru_RU");
+
+    CUtil::InitJSCore(['fx', 'ajax', 'json', 'ls', 'session', 'jquery', 'popup', 'pull']);
+    CJSCore::Init(['fx', 'ajax', 'json', 'ls', 'session', 'jquery', 'popup', 'pull']);
     ?>
     <? $APPLICATION->ShowHead(); ?>
     <title><? $APPLICATION->ShowTitle() ?></title>

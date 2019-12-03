@@ -4,6 +4,11 @@
 <?
 require_once(dirname(__FILE__) . '/../../include/templates/header.php');
 ?>
+<?
+    if(!$USER->IsAuthorized()) {
+        LocalRedirect('/'); //Отправляем всех неавторизованных пользователей на домашнюю
+    }
+?>
 <?$APPLICATION->IncludeComponent("bitrix:breadcrumb",".default",Array(
         "START_FROM" => "0",
         "PATH" => "",

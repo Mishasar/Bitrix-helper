@@ -12,14 +12,14 @@ use FastRoute;
  */
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->addRoute(['POST'], '/ajax/forms/auth/', 'Letsrock\Lib\Controllers\AuthController/auth');
-    $r->addRoute(['POST'], '/ajax/basket/add/', 'Letsrock\Lib\Controllers\BasketController/addByStore');
-    $r->addRoute(['POST'], '/ajax/basket/remove/', 'Letsrock\Lib\Controllers\BasketController/removeItem');
-    $r->addRoute(['POST'], '/ajax/basket/quantity/', 'Letsrock\Lib\Controllers\BasketController/setQuantity');
-    $r->addRoute(['POST'], '/ajax/catalog/getModal/', 'Letsrock\Lib\Controllers\CatalogController/getRenderModal');
-    $r->addRoute(['POST'], '/ajax/basket/order/', 'Letsrock\Lib\Controllers\BasketController/order');
-    $r->addRoute(['POST'], '/ajax/order/repeat/', 'Letsrock\Lib\Controllers\OrderController/repeat');
-    $r->addRoute(['POST'], '/ajax/basket/addBonusProduct/', 'Letsrock\Lib\Controllers\BasketController/addBonusProduct');
+    $r->addRoute(['POST'], '/ajax-virtual/forms/auth/', 'Letsrock\Lib\Controllers\AuthController/auth');
+    $r->addRoute(['POST'], '/ajax-virtual/basket/add/', 'Letsrock\Lib\Controllers\BasketController/addByStore');
+    $r->addRoute(['POST'], '/ajax-virtual/basket/remove/', 'Letsrock\Lib\Controllers\BasketController/removeItem');
+    $r->addRoute(['POST'], '/ajax-virtual/basket/quantity/', 'Letsrock\Lib\Controllers\BasketController/setQuantity');
+    $r->addRoute(['POST'], '/ajax-virtual/catalog/getModal/', 'Letsrock\Lib\Controllers\CatalogController/getRenderModal');
+    $r->addRoute(['POST'], '/ajax-virtual/basket/order/', 'Letsrock\Lib\Controllers\BasketController/order');
+    $r->addRoute(['POST'], '/ajax-virtual/order/repeat/', 'Letsrock\Lib\Controllers\OrderController/repeat');
+    $r->addRoute(['POST'], '/ajax-virtual/basket/addBonusProduct/', 'Letsrock\Lib\Controllers\BasketController/addBonusProduct');
 });
 
 //___________________________
