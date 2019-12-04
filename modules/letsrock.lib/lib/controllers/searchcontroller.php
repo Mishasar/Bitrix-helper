@@ -103,8 +103,8 @@ class SearchController extends Controller
         }
 
         $arResult = [];
-        $arSelect = ["ID", "NAME", "DATE_ACTIVE_FROM", 'PREVIEW_PICTURE'];
-        $res = CIBlockElement::GetList([], $arFilter, false, ["nPageSize" => 1], $arSelect);
+        $arSelect = ["ID", "NAME", "DATE_ACTIVE_FROM", 'PREVIEW_PICTURE', 'DETAIL_PAGE_URL'];
+        $res = CIBlockElement::GetList([], $arFilter, false, ["nPageSize" => 10], $arSelect);
 
         while ($ob = $res->GetNextElement()) {
             $item = $ob->GetFields();
@@ -112,8 +112,11 @@ class SearchController extends Controller
                 ["width" => 150, "height" => 150], BX_RESIZE_IMAGE_PROPORTIONAL);
             $price = CatalogHelper::getElementPrice($item['ID']);
 
-            if(!empty($price)) {
-                $item['PRICE'] = CurrencyFormat((CatalogHelper::getElementPrice($item['ID']))['NORMAL_PRICE']['PRICE'], "RUB");
+            if (!empty($price)) {
+                $item['PRICE'] = CurrencyFormat((CatalogHelper::getElementPrice($item['ID']))['NORMAL_PRICE']['PRICE'],
+                    "RUB");
+            } else {
+                $item['PRICE'] = '-';
             }
 
             $arResult[] = $item;
@@ -135,7 +138,7 @@ class SearchController extends Controller
         $arResult = self::getProducts(['ARTICLE' => $query]);
 
         if (!$arResult) {
-            $arResult = Controller::sendAnswer(['ITEMS' => self::standartSearch($query)]);
+            $arResult = self::standartSearch($query);
         }
 
         foreach ($arResult as $result) {

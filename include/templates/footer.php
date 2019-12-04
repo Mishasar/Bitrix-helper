@@ -72,7 +72,7 @@
                 <div class="modal__title">Войти</div>
             </div>
             <div class="modal__content">
-                <form class="modal__form-auth validator js-form-auth" action="/ajax/forms/auth/" method="post">
+                <form class="modal__form-auth validator js-form-auth" action="/ajax-virtual/forms/auth/" method="post">
                     <div class="modal__form-error form__text js-form-auth-errors"></div>
                     <label class="field">
                         <p>Электронная почта</p>
