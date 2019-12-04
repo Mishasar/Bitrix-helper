@@ -20,6 +20,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute(['POST'], '/ajax-virtual/basket/order/', 'Letsrock\Lib\Controllers\BasketController/order');
     $r->addRoute(['POST'], '/ajax-virtual/order/repeat/', 'Letsrock\Lib\Controllers\OrderController/repeat');
     $r->addRoute(['POST'], '/ajax-virtual/basket/addBonusProduct/', 'Letsrock\Lib\Controllers\BasketController/addBonusProduct');
+    $r->addRoute(['POST'], '/ajax-virtual/search/', 'Letsrock\Lib\Controllers\SearchController/search');
 });
 
 //___________________________

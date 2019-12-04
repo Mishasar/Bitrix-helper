@@ -64,18 +64,23 @@
                             ); ?>
                         </div>
                         <div class="header__top-right">
-                            <? $APPLICATION->IncludeComponent("bitrix:search.title",
-                                "header",
-                                [
-                                    "CHECK_DATES" => "Y",
-                                    "PAGE" => "#SITE_DIR#/search/",
-                                    "SHOW_INPUT" => "Y",
-                                    "SHOW_OTHERS" => "N",
-                                    "TOP_COUNT" => "10",
-                                    "USE_LANGUAGE_GUESS" => "Y"
-                                ],
-                                false
-                            ); ?>
+                            <div class="header__search">
+                                <div class="search js-search">
+                                    <form class="search__inner" action="/search/" method="get">
+                                        <input type="text" name="q" placeholder="Поиск" autocomplete="off">
+                                        <button class="btn btn-search" type="submit"></button>
+                                    </form>
+                                    <div class="search__result">
+                                        <div class="search__result-inner js-result-container"></div>
+                                        <div class="search__result-bottom">
+                                            <a class="search__result-all js-search-result-link" href="javascript:void(0);" data-url="/search/?q=">
+                                                <span class="search__result-icon"></span>
+                                                <p>Показать все результаты поиска</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <? if ($USER->IsAuthorized()) {
                                 $APPLICATION->IncludeComponent("bitrix:sale.basket.basket.line", "header", [
                                     "HIDE_ON_BASKET_PAGES" => "Y",
