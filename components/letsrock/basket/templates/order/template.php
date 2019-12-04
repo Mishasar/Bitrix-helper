@@ -88,7 +88,7 @@ $emptyBasket = empty($arResult['STOCKS']);
     <? if (!$emptyBasket): ?>
         <section class="section basket-total__section js-order-section">
             <div class="container">
-                <form class="validator js-form-order" method="post" action="/ajax/basket/order/">
+                <form class="validator js-form-order" method="post" action="/ajax-virtual/basket/order/">
                     <div class="basket-total__wrap">
                         <div class="basket-total__wrap-left">
                             <div class="basket-total__form">
