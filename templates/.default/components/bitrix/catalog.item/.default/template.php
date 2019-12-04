@@ -288,9 +288,6 @@ if (isset($arResult['ITEM']))
 			)
 		);
 		?>
-		<script>
-		  var <?=$obName?> = new JCCatalogItem(<?=CUtil::PhpToJSObject($jsParams, false, true)?>);
-		</script>
 	</div>
 	<?
 	unset($item, $actualItem, $minOffer, $itemIds, $jsParams);

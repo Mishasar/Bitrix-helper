@@ -25,13 +25,14 @@ class SearchController extends Controller
      */
     public static function search(array $request)
     {
+        global $USER;
         $productsByArticles = self::getProducts(['ARTICLE' => $request['search']]);
 
-        if ($productsByArticles) {
-            echo Controller::sendAnswer(['ITEMS' => $productsByArticles]);
-        } else {
-            echo Controller::sendAnswer(['ITEMS' => self::standartSearch($request['search'])]);
+        if (!$productsByArticles) {
+            $productsByArticles = self::standartSearch($request['search']);
         }
+
+        echo Controller::sendAnswer(['ITEMS' => $productsByArticles, 'AUTH' => $USER->IsAuthorized()]);
     }
 
     /**

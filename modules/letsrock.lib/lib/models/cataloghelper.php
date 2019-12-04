@@ -154,7 +154,7 @@ class CatalogHelper
     public static function getClearName(string $propName): string
     {
         if ($propName{0} == ".") {
-            $propName{0} = "";
+            $propName = mb_substr($propName, 1);
         }
 
         return $propName;
@@ -175,8 +175,9 @@ class CatalogHelper
 
         $lightDeg = intval($propValue);
         $lightDeg = $lightDeg - COLOR_LIGHT_LEFT_BORDER_DEG;
+        $percent = (int)(($lightDeg / (COLOR_LIGHT_RIGHT_BORDER_DEG - COLOR_LIGHT_LEFT_BORDER_DEG)) * 100);
 
-        return (int)(($lightDeg / (COLOR_LIGHT_RIGHT_BORDER_DEG - COLOR_LIGHT_LEFT_BORDER_DEG)) * 100);
+        return $percent > 0 ? $percent : -1 * $percent;
     }
 
     /**
