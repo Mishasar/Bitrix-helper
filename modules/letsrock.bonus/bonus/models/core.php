@@ -203,7 +203,7 @@ abstract class Core
     }
 
     /**
-     * Возвращает количество бонусов которое нужно добавить пользователю по сумме покупки
+     * Возвращает количество бонусов которое получит пользователю по сумме покупки
      *
      * @param int $moneyCount Сумма покупки
      *
@@ -223,5 +223,25 @@ abstract class Core
         } else {
             return 0;
         }
+    }
+
+    /**
+     * Возвращает количество денег которое нужно добавить пользователю
+     *
+     * @param int $moneyCount Сумма покупки
+     *
+     * @return int
+     */
+    public function getPriceDiff(int $moneyCount): int
+    {
+        $startDate = $this->getUserRegData();
+        $monthOrdersCost = $this->getMonthOrdersCost($startDate);
+        $monthOrdersCost += $moneyCount; //Новая покупка ещё не входит месячную сумму
+        $month = Helper::findLeftBorderInArray($this->bonusSystemByMonth, $this->month);
+        $bonusBorder = Helper::findLeftBorderInArray($this->bonusSystemByMonth[$month]['ELEMENTS'], $monthOrdersCost);
+        $bonusCost = $this->bonusSystemByMonth[$month]['ELEMENTS'][$bonusBorder]['PROPERTY_COUNT_MONEY_VALUE'];
+        $priceDiff = $bonusCost - $monthOrdersCost;
+
+        return $priceDiff > 0 ? $priceDiff : 0;
     }
 }

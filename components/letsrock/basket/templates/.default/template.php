@@ -106,12 +106,14 @@ $emptyBasket = empty($arResult['STOCKS']);
                                 </div>
                             </div>
                             <div class="basket-total__bottom">
-                                <div class="basket-total__bonus">
-                                    <a href="#">Добавить товары</a>
-                                    на сумму
-                                    <b>100&nbsp;500&nbsp;₽</b>
-                                    для получения бонусов
-                                </div>
+                                <? if ($arResult['COMMON']['BONUS_BY_COST'] > 0): ?>
+                                    <div class="basket-total__bonus">
+                                        <a href="/catalog/">Добавить товары</a>
+                                        на сумму
+                                        <b><?= CurrencyFormat($arResult['COMMON']['BONUS_BY_COST'], "RUB") ?></b>
+                                        для получения бонусов
+                                    </div>
+                                <? endif; ?>
                                 <a class="basket-total__order btn btn-yellow" href="/cart/order.php">
                                     Перейти к офоромлению заказа
                                 </a>

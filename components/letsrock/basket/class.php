@@ -3,6 +3,7 @@
 }
 
 \Bitrix\Main\Loader::includeModule('letsrock.lib');
+\Bitrix\Main\Loader::includeModule('letsrock.bonus');
 
 class BasketComponent extends CBitrixComponent
 {
@@ -23,7 +24,11 @@ class BasketComponent extends CBitrixComponent
     public function executeComponent()
     {
         if ($this->startResultCache()) {
+            global $USER;
+            $informationBonus = new \Letsrock\Bonus\Information($USER->GetID());
+
             $this->arResult = \Letsrock\Lib\Models\Basket::getBasketByStocks();
+            $this->arResult['COMMON']['BONUS_BY_COST'] = $informationBonus->getPriceDiff($this->arResult['COMMON']['COST']);
             $this->includeComponentTemplate();
         }
 

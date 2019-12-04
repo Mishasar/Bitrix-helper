@@ -4,11 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <?
-
     use Bitrix\Main\Page\Asset;
 
     CUtil::InitJSCore();
-
+    CJSCore::Init(['fx', 'ajax', 'json', 'ls', 'session', 'jquery', 'popup', 'pull']);
 
     Asset::getInstance()->addString('<link rel="shortcut icon" href="' . ASSETS_PATH . 'img/favicons/favicon.ico" type="image/x-icon">');
     Asset::getInstance()->addString('<link rel="apple-touch-icon" href="' . ASSETS_PATH . 'img/favicons/apple-touch-icon.png">');
@@ -23,12 +22,7 @@
     //Подключаем статику
     Asset::getInstance()->addCss(ASSETS_PATH . "styles/main.min.css");
     Asset::getInstance()->addJs(ASSETS_PATH . "js/main.min.js");
-
-
     Asset::getInstance()->addJs("https://api-maps.yandex.ru/2.1/?lang=ru_RU");
-
-    CUtil::InitJSCore(['fx', 'ajax', 'json', 'ls', 'session', 'jquery', 'popup', 'pull']);
-    CJSCore::Init(['fx', 'ajax', 'json', 'ls', 'session', 'jquery', 'popup', 'pull']);
     ?>
     <? $APPLICATION->ShowHead(); ?>
     <title><? $APPLICATION->ShowTitle(false)?></title>
@@ -81,7 +75,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <? if ($USER->IsAuthorized()) {
+                            <? if ($USER->IsAuthorized() && !CSite::InDir('/cart/')) {
                                 $APPLICATION->IncludeComponent("bitrix:sale.basket.basket.line", "header", [
                                     "HIDE_ON_BASKET_PAGES" => "Y",
                                     // Не показывать на страницах корзины и оформления заказа
