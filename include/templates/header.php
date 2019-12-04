@@ -31,7 +31,7 @@
     CJSCore::Init(['fx', 'ajax', 'json', 'ls', 'session', 'jquery', 'popup', 'pull']);
     ?>
     <? $APPLICATION->ShowHead(); ?>
-    <title><? $APPLICATION->ShowTitle() ?></title>
+    <title><? $APPLICATION->ShowTitle(false)?></title>
     <meta name="theme-color" content="#c9e0e04d">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport"

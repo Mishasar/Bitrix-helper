@@ -12,7 +12,7 @@ require_once(dirname(__FILE__) . '/../../include/templates/header.php');
 );?>
 <section class="section-title">
     <div class="container">
-        <h1 class="h1">Контакты</h1>
+        <h1 class="h1"><? $APPLICATION->ShowTitle()?></h1>
     </div>
 </section>
 <section class="section">

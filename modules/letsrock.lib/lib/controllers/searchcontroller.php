@@ -6,6 +6,7 @@ use Bitrix\Main\Loader;
 use CFile;
 use CIBlockElement;
 use CSearch;
+use Letsrock\Lib\Models\CatalogHelper;
 
 Loader::includeModule("search");
 
@@ -24,7 +25,7 @@ class SearchController extends Controller
      */
     public static function search(array $request)
     {
-        $productsByArticles = self::searchByArticle($request['search']);
+        $productsByArticles = self::getProducts(['ARTICLE' => $request['search']]);
 
         if ($productsByArticles) {
             echo Controller::sendAnswer(['ITEMS' => $productsByArticles]);
@@ -75,16 +76,7 @@ class SearchController extends Controller
         }
 
         if (!empty($idsProducts)) {
-            $arSelect = ["ID", "NAME", "DATE_ACTIVE_FROM", 'PREVIEW_PICTURE'];
-            $arFilter = ["IBLOCK_ID" => IntVal(IB_CATALOG), 'ID' => $idsProducts];
-            $res = CIBlockElement::GetList([], $arFilter, false, ["nPageSize" => 10], $arSelect);
-
-            while ($ob = $res->GetNextElement()) {
-                $item = $ob->GetFields();
-                $item['PICTURE'] = CFile::ResizeImageGet($item['PREVIEW_PICTURE'],
-                    ["width" => 150, "height" => 150], BX_RESIZE_IMAGE_PROPORTIONAL);
-                $arResult[] = $item;
-            }
+            $arResult = self::getProducts(['IDS' => $idsProducts]);
         }
 
         return $arResult;
@@ -93,21 +85,37 @@ class SearchController extends Controller
     /**
      * Поиск по артиклу
      *
-     * @param string $query
+     * @param array $params Массив параметров
      *
      * @return array
      */
-    public static function searchByArticle(string $query): array
+    private static function getProducts(array $params): array
     {
+
+        $arFilter = ["IBLOCK_ID" => IntVal(IB_CATALOG)];
+
+        if (!empty($params['IDS'])) {
+            $arFilter['ID'] = $params['IDS'];
+        }
+
+        if (!empty($params['ARTICLE'])) {
+            $arFilter['=PROPERTY_' . PROPERTY_ARTICLES] = $params['ARTICLE'];
+        }
+
         $arResult = [];
         $arSelect = ["ID", "NAME", "DATE_ACTIVE_FROM", 'PREVIEW_PICTURE'];
-        $arFilter = ["IBLOCK_ID" => IntVal(IB_CATALOG), '=PROPERTY_' . PROPERTY_ARTICLES => $query];
         $res = CIBlockElement::GetList([], $arFilter, false, ["nPageSize" => 1], $arSelect);
 
         while ($ob = $res->GetNextElement()) {
             $item = $ob->GetFields();
             $item['PICTURE'] = CFile::ResizeImageGet($item['PREVIEW_PICTURE'],
                 ["width" => 150, "height" => 150], BX_RESIZE_IMAGE_PROPORTIONAL);
+            $price = CatalogHelper::getElementPrice($item['ID']);
+
+            if(!empty($price)) {
+                $item['PRICE'] = CurrencyFormat((CatalogHelper::getElementPrice($item['ID']))['NORMAL_PRICE']['PRICE'], "RUB");
+            }
+
             $arResult[] = $item;
         }
 
@@ -124,7 +132,7 @@ class SearchController extends Controller
     public static function getIdsArrayByQuery(string $query): array
     {
         $ids = [];
-        $arResult = self::searchByArticle($query);
+        $arResult = self::getProducts(['ARTICLE' => $query]);
 
         if (!$arResult) {
             $arResult = Controller::sendAnswer(['ITEMS' => self::standartSearch($query)]);

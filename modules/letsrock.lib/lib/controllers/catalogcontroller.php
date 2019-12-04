@@ -9,8 +9,16 @@ namespace Letsrock\Lib\Controllers;
 
 use Letsrock\Lib\Models\CatalogHelper;
 
+/**
+ * Class CatalogController
+ *
+ * @package Letsrock\Lib\Controllers
+ */
 class CatalogController extends Controller
 {
+    /**
+     * @param $request
+     */
     public function getRenderModal($request)
     {
         $stockCode = [];
