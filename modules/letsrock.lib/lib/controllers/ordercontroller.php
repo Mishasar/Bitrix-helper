@@ -6,6 +6,7 @@ use Bitrix\Main\Config\Option;
 use Bitrix\Main\Context;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Basket;
+use Bitrix\Sale\Fuser;
 use Bitrix\Sale\Order;
 use CFile;
 use CIBlockElement;
@@ -140,6 +141,67 @@ class OrderController extends Controller
      * @throws \Bitrix\Main\ObjectNotFoundException
      */
     public static function repeat($request)
+    {
+        global $USER;
+        $order_id = $request['ORDER_ID'];
+        $siteId = Context::getCurrent()->getSite();
+        $order = Order::loadByAccountNumber($order_id);
+        $currencyCode = Option::get('sale', 'default_currency', 'RUB');
+        $basket = $order->getBasket();
+        $shipmentCollection = $order->getShipmentCollection();
+
+        foreach ($shipmentCollection as $shipment) {
+            if ($shipment->isSystem()) {
+                continue;
+            }
+        }
+
+        $orderNew = Order::create($siteId, $USER->GetID());
+        $orderNew->setPersonTypeId(2);
+        $basketNew = Basket::loadItemsForFUser(Fuser::getId(), SITE_ID);
+        $basketNew->clearCollection();
+
+        foreach ($basket as $key => $basketItem) {
+            $item = $basketNew->createItem('catalog', $basketItem->getProductId());
+            $basketPropertyCollection = $basketItem->getPropertyCollection();
+            $basketProperties = $basketPropertyCollection->getPropertyValues();
+            $itemPropertyCollection = $item->getPropertyCollection();
+
+            $item->setFields([
+                'QUANTITY' => $basketItem->getQuantity(),
+                'CURRENCY' => $currencyCode,
+                'LID' => $siteId,
+                'PRODUCT_PROVIDER_CLASS' => '\CCatalogProductProvider'
+            ]);
+
+            $itemPropertyCollection->redefine([
+                ['NAME' => 'Склад', 'CODE' => 'STOCK', 'VALUE' => $basketProperties['STOCK']['VALUE']],
+            ]);
+
+            $basketPropertyCollection->save();
+        }
+
+        $basketNew->save();
+
+        echo Controller::sendAnswer();
+    }
+
+    /**
+     * AJAX
+     * Повторяет заказ по ID
+     *
+     * @param $request
+     *
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\ArgumentTypeException
+     * @throws \Bitrix\Main\NotImplementedException
+     * @throws \Bitrix\Main\NotSupportedException
+     * @throws \Bitrix\Main\ObjectException
+     * @throws \Bitrix\Main\ObjectNotFoundException
+     */
+    public static function repeatAndOrder($request)
     {
         global $USER;
         $order_id = $request['ORDER_ID'];

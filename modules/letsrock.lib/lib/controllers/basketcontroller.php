@@ -7,6 +7,7 @@ use Bitrix\Main\Context;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Basket;
 use Bitrix\Sale\Order;
+use CCatalogStore;
 use Letsrock\Bonus\Withdraw;
 use Letsrock\Lib\Models\User;
 
@@ -24,6 +25,8 @@ class BasketController extends Controller
      * Ajax
      *
      * @param $request
+     *
+     * @throws \Exception
      */
     public static function addBonusProduct($request)
     {
@@ -223,6 +226,28 @@ class BasketController extends Controller
     }
 
     /**
+     * @return array
+     */
+    public static function getStocksList(): array
+    {
+        $stocksList = [];
+
+        $dbResult = CCatalogStore::GetList(
+            ['ID' => 'ASC'],
+            [],
+            false,
+            false,
+            ["ID", 'XML_ID']
+        );
+
+        while ($res = $dbResult->GetNext()) {
+            $stocksList[$res['ID']] = $res['XML_ID'];
+        }
+
+        return $stocksList;
+    }
+
+    /**
      * AJAX
      * Оформление заказа
      *
@@ -243,7 +268,9 @@ class BasketController extends Controller
     {
         global $USER;
 
+
         if ($USER->isAuthorized()) {
+            $stocksList = self::getStocksList();
             $comment = $request["comment"];
             $siteId = Context::getCurrent()->getSite();
             $currencyCode = CurrencyManager::getBaseCurrency();
@@ -258,6 +285,19 @@ class BasketController extends Controller
             }
 
             $basket = Basket::loadItemsForFUser($USER->GetID(), $siteId);
+
+            foreach ($basket as $key => $basketItem) {
+                $basketPropertyCollection = $basketItem->getPropertyCollection();
+                $basketProperties = $basketPropertyCollection->getPropertyValues();
+                $stocksCode = !empty($stocksList[$basketProperties['STOCK']['VALUE']]) ? $stocksList[$basketProperties['STOCK']['VALUE']] : 0;
+
+                $basketPropertyCollection->redefine([
+                    ['NAME' => 'Склад', 'CODE' => 'STOCK', 'VALUE' => $stocksCode],
+                ]);
+
+                $basketPropertyCollection->save();
+            }
+
             $order->setBasket($basket);
 
             // Устанавливаем свойства
