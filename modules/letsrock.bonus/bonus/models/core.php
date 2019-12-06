@@ -238,6 +238,11 @@ abstract class Core
         $monthOrdersCost = $this->getMonthOrdersCost($startDate);
         $monthOrdersCost += $moneyCount; //Новая покупка ещё не входит месячную сумму
         $month = Helper::findLeftBorderInArray($this->bonusSystemByMonth, $this->month);
+
+        if ($month == 0) {
+            $month = 1;
+        }
+
         $bonusBorder = Helper::findLeftBorderInArray($this->bonusSystemByMonth[$month]['ELEMENTS'], $monthOrdersCost);
         $bonusCost = $this->bonusSystemByMonth[$month]['ELEMENTS'][$bonusBorder]['PROPERTY_COUNT_MONEY_VALUE'];
         $priceDiff = $bonusCost - $monthOrdersCost;
