@@ -6,6 +6,7 @@ use Bitrix\Currency\CurrencyManager;
 use Bitrix\Main\Context;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Basket;
+use Bitrix\Sale\Fuser;
 use Bitrix\Sale\Order;
 use CCatalogStore;
 use Letsrock\Bonus\Withdraw;
@@ -284,7 +285,7 @@ class BasketController extends Controller
                 $order->setField('USER_DESCRIPTION', $comment);
             }
 
-            $basket = Basket::loadItemsForFUser($USER->GetID(), $siteId);
+            $basket = Basket::loadItemsForFUser(Fuser::getId(), $siteId);
 
             foreach ($basket as $key => $basketItem) {
                 $basketPropertyCollection = $basketItem->getPropertyCollection();
