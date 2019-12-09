@@ -11,7 +11,7 @@ class BasketComponent extends CBitrixComponent
     {
         $result = [
             "CACHE_TYPE" => $arParams["CACHE_TYPE"],
-            "CACHE_TIME" => isset($arParams["CACHE_TIME"]) ? $arParams["CACHE_TIME"] : 36000000,
+            "CACHE_TIME" => isset($arParams["CACHE_TIME"]) ? $arParams["CACHE_TIME"] : 60,
         ];
 
         return $result;
